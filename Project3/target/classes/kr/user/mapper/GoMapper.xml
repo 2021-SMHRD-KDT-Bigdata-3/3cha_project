@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.user.mapper.GoMapper">
+
+    <!-- users 부분 -->
+    <select id="UsersLogin"  
+         resultType="kr.user.mapper.UsersVO" >
+        select * from users where user_id=#{user_id} and user_pw=#{user_pw}
+    </select>
+    
+    
+     <select id = "UsersListAjax" resultType="kr.user.mapper.UsersVO" >
+    select * from users order by idx desc
+   </select>
+   
+    <insert id="UsersInsert" parameterType="kr.user.mapper.UsersVO">
+        insert into users(user_id,user_pw,user_name,user_bank)
+      values(#{user_id},#{user_pw},#{user_name},#{user_bank})
+    </insert>
+    
+    
+     <insert id="UsersJoin" parameterType="kr.user.mapper.UsersVO">
+        insert into users(user_id,user_pw,user_name,user_bank)
+      values(#{user_id},#{user_pw},#{user_name},#{user_bank})
+    </insert>
+    
+    <select id="UsersContent" parameterType="int" 
+        resultType="kr.user.mapper.UsersVO">
+        select * from users where user_num=#{user_num}
+    </select>
+    
+    <update id="UsersUpdate" parameterType="kr.user.mapper.UsersVO">
+       update users set
+       user_pw=#{user_pw},
+       user_bank=#{user_bank}
+       where user_num=#{user_num}
+   </update>
+   
+   <delete id="delete2" parameterType="kr.user.mapper.UsersVO" >
+        delete from users where user_id=#{user_id} and user_pw=#{user_pw}
+        
+    </delete>
+    
+   
+    <!-- notice 부분 -->
+
+    <!-- 고지서 셀렉터 -->
+     <select id="NoticeSelect"  parameterType = "String"
+         resultType="kr.user.mapper.NoticeVO" >
+        select * from notice where user_num = #{user_num}  ORDER BY notice_num desc;
+    </select>
+    
+     
+   <!--  고지서번호로 하나 행만 뽑아기  -->
+     <select id="NoticeOne"  parameterType = "String"
+         resultType="kr.user.mapper.NoticeVO" >
+        select * from notice where notice_num = #{notice_num} 
+    </select>
+    
+    
+     <!-- 커뮤니티 상세 -->
+     <select id="comm_contents"  parameterType = "String"
+         resultType="kr.user.mapper.boardVO" >
+        select * from board where board_num = #{board_num}
+    </select>
+     
+     
+
+        <select id = "NoticeListAjax" 
+            resultType="kr.user.mapper.NoticeVO" >
+    select * from notice where notice_num=#{notice_num}
+   </select>
+   
+   <!-- ==================================notice_num 최근거 1개만 출력================================== -->
+   <select id = "NoticeSelect_notice_num" resultType="int" >
+    select notice_num from notice order by notice_num desc limit 1;
+   </select>
+
+   <!-- ==================================pay_money 최근거 1개만 출력================================== -->
+   <select id = "NoticeSelect_pay_money" parameterType="int" resultType="int" >
+    select pay_money from notice where user_num=#{user_num} order by notice_num desc limit 1;
+   </select>
+   
+    <insert id="NoticeInsert" parameterType="kr.user.mapper.NoticeVO">
+        insert into notice(user_num,notice_code,notice_title,pay_day,pay_money,pay_bank,img)
+      values(#{user_num},#{notice_code},#{notice_title},#{pay_day},#{pay_money},#{pay_bank},#{img})
+    </insert>
+    
+    <!-- 고지서 가져오기 -->
+    <select id = "NoticeList" parameterType="int" 
+        resultType="kr.user.mapper.NoticeVO" >
+    select * from notice where user_num=#{user_num}
+   </select>
+   
+    
+   <!-- 그래프 리스트가져오기-->
+    <select id = "testlist" parameterType="int" 
+        resultType="kr.user.mapper.NoticeVO" >
+    select * from notice where user_num=#{user_num} and notice_code = "관리비" order by notice_num desc
+    </select>
+    
+    
+    
+    
+    <update id="NoticeUpdate" parameterType="kr.user.mapper.NoticeVO">
+       update notice set
+       notice_code=#{notice_code},
+       notice_title=#{notice_title},
+       pay_day=#{pay_day},
+       pay_money=#{pay_money},
+       pay_bank=#{pay_bank},
+       img=#{img}
+       where notice_num=#{notice_num}
+   </update>
+   
+   <delete id="NoticeDelete" parameterType="int" >
+        delete from notice where notice_num=#{notice_num}
+        
+    </delete>
+    
+   
+   
+	<!--이미지 -->
+	 <insert id="imageInsert" parameterType="kr.user.mapper.imgVO">
+        insert into test_img(img)
+        values(#{img})
+    </insert>
+   
+   <!-- ㄴㅁ -->
+   
+   <select id="imageSelect"  
+         resultType="kr.user.mapper.imgVO" >
+        select * from test_img 
+    </select>
+   
+   
+      <!--글쓰기 인서트 -->
+   <insert id="comInsert" parameterType="kr.user.mapper.boardVO">
+        insert into board(user_num,user_id, board_title, board_content,board_img )
+      values(#{user_num},#{user_id}, #{board_title},#{board_content},#{board_img})
+    </insert>
+    
+  <!--  글쓰기 하나 -->
+     <select id = "boardListOne" parameterType="int" resultType="kr.user.mapper.boardVO" >
+    select * from board where board_num = #{board_num}
+   </select>
+   
+    
+  <!--  <insert id="bill_upload2" parameterType="kr.user.mapper.NoticeVO">
+   	insert into notice(notice_code,notice_title,pay_day,pay_money,pay_bank,img)
+    values(0,'제목','납부기간',0,'납부은행',#{img})
+    </insert> -->
+    
+
+    <!-- 문의사항 -->
+    <insert id="contactInsert" parameterType="kr.user.mapper.ContactVO">
+        insert into contacts(user_num,user_mail,user_opinion)
+      values(#{user_num},#{user_mail},#{user_opinion})
+    </insert>
+
+    
+<!-- 아이디중복확인 -->
+    <select id = "ID_Check" parameterType="String" resultType="kr.user.mapper.UsersVO" >
+    select * from users where user_id = #{user_id}
+   </select>
+    
+    
+    <!-- 카카오톡 회원찾기 -->
+     <select id = "kaselect" parameterType="String" resultType="kr.user.mapper.UsersVO" >
+    select * from users where user_id = #{user_id}
+   </select>
+    
+
+</mapper>
